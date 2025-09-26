@@ -1,10 +1,12 @@
 const typingText = document.querySelector(".typing-text p "),
 inpField = document.querySelector(".wrapper .input-field");
-timeTag = document.querySelector(".time span b "),
+timeTag = document.querySelector(".time span b"),
 mistakeTag = document.querySelector(".mistake span");
 wpmTag = document.querySelector(".wpm span");
 cpmTag = document.querySelector(".cpm span");
 tryAgainBtn = document.querySelector("button");
+
+
 
 let timer,
 maxTime=60,
@@ -66,17 +68,36 @@ function initTyping() {
         inpField.value = "";
         clearInterval(timer);
     }
+    if (charIndex === characters.length - 1) {
+        launchConfetti();
+    }
 }
 
 function initTimer() {
     if(timeLeft > 0 ){
         timeLeft--;
         timeTag.innerText = timeLeft;
+
+        // Reset classes first
+        timeTag.classList.remove("warning", "danger");
+
+        // Add color based on time left
+        if(timeLeft <= 10){
+            timeTag.classList.add("danger");
+        } else if(timeLeft <= 30){
+            timeTag.classList.add("warning");
+        }
     }
     else{
         clearInterval(timer);
+
+        timeTag.classList.remove("danger", "warning");
+        timeTag.style.color = "red"; // keep final red static
+        timeTag.style.transform = "scale(1)"; // reset size
+        timeTag.innerText = 0;
     }
 }
+
 function resetGame () {
     randomParagraph();
     inpField.value = "";
@@ -92,3 +113,59 @@ function resetGame () {
 randomParagraph();
 inpField.addEventListener("input", initTyping);
 tryAgainBtn.addEventListener("click", resetGame);
+
+
+function launchConfetti() {
+  const duration = 2 * 1000; // 2 seconds
+  const end = Date.now() + duration;
+
+  (function frame() {
+    confetti({
+      particleCount: 5,
+      angle: 60,
+      spread: 55,
+      origin: { x: 0 }
+    });
+    confetti({
+      particleCount: 5,
+      angle: 120,
+      spread: 55,
+      origin: { x: 1 }
+    });
+
+    if (Date.now() < end) {
+      requestAnimationFrame(frame);
+    }
+  })();
+
+  // 🎉 Show success message
+ // 🎉 Show success message with stats
+   const msg = document.getElementById("successMessage");
+  let wpm = parseInt(wpmTag.innerText);
+  let feedback = "";
+
+  if (wpm >= 70) feedback = "🚀 Lightning fast!";
+  else if (wpm >= 40) feedback = "🔥 Great job!";
+  else feedback = "💪 Keep practicing!";
+
+  msg.innerHTML = `
+    Well done! 🎉<br>
+    <strong>WPM: ${wpmTag.innerText}</strong> | 
+    <span class="mistakes">Mistakes: ${mistakeTag.innerText}</span><br>
+    ${feedback}
+  `;
+  msg.classList.add("show");
+
+
+
+  // Hide after 2.5s
+ setTimeout(() => {
+  msg.classList.remove("show");
+  msg.classList.add("hide");
+
+  // Reset after animation so it's ready for next time
+  setTimeout(() => {
+    msg.classList.remove("hide");
+  }, 500); // match CSS transition time
+}, 2500);
+}

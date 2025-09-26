@@ -11,8 +11,13 @@
       href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
       rel="stylesheet"
     />
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
   </head>
   <body>
+    <header class="hero-header">
+      <h1 class="animated-title" aria-live="polite"></h1>
+    </header>
     <div class="wrapper">
       <input type="text" class="input-field">
       <div class="content-box">
@@ -43,7 +48,11 @@
         </div>
       </div>
     </div>
+    <div class="success-message" id="successMessage">Well done! 🎉</div>
+
     <script src="paragraph.js"></script>
     <script src="script.js"></script>
+    <script src="typed-header.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
   </body>
 </html>
